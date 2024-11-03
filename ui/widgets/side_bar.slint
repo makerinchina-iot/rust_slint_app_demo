@@ -1,0 +1,133 @@
+
+import { HorizontalBox, Palette } from "std-widgets.slint";
+export component SideBar {
+    in property <length> icon-size:50px;
+    in-out property <bool> colapsed: true;
+    in property <[{icon:image, title:string}]> main-items;
+    in property <[{icon:image, title:string}]> bottom-items;
+    out property <int> select-index: 0;
+    // color
+    function isDarkMode() -> bool {
+        return Palette.color-scheme == ColorScheme.dark;
+    }
+    property <color> back-color:isDarkMode() ? #363636 : #d0d0d0;
+    property <brush> icon-color:isDarkMode() ? #d0d0d0 : #000000;
+    property <color> selected-color: isDarkMode() ? #7a7a7a : #f0f0f0;
+    Rectangle {
+        background: back-color;
+        VerticalLayout {
+            //navigate menu
+            spacing: 8px;
+            HorizontalLayout {
+                spacing: 10px;
+                padding: 10px;
+                Rectangle {
+                    width: icon-size;
+                    height: icon-size;
+                    Image {
+                        width: icon-size - 6px;
+                        height: icon-size - 6px;
+                        source: @image-url("../icons/nav.svg");
+                        colorize: icon-color;
+                        states [
+                            pressed when ta1.pressed: {
+                                width: icon-size / 4;
+                            }
+                        ]
+                        animate width {
+                            duration: 200ms;
+                            easing: ease-in-out;
+                        }
+                    }
+
+                    ta1 := TouchArea {
+                        clicked => {
+                            root.colapsed = !root.colapsed;
+                            // debug("clicked to colapsed : ",root.colapsed);
+                        }
+                    }
+
+                    states [
+                        hovered when ta1.has-hover: {
+                            background: selected-color;
+                        }
+                    ]
+                }
+            }
+
+            //main items
+            VerticalLayout {
+                alignment: start;
+                spacing: 10px;
+                for item[i] in main-items: Rectangle {
+                    HorizontalLayout {
+                        spacing: 10px;
+                        padding: 10px;
+                        icon := Image {
+                            source: item.icon;
+                            width: icon-size - 6px;
+                            colorize: icon-color;
+                        }
+
+                        if(!root.colapsed): tx := Text {
+                            vertical-alignment: center;
+                            text: item.title;
+                        }
+                    }
+
+                    ta2 := TouchArea {
+                        clicked => {
+                            root.select-index = i;
+                        }
+                    }
+
+                    states [
+                        hovered when ta2.has-hover: {
+                            background: selected-color;
+                        }
+                        seledted when root.select-index == i: {
+                            background: selected-color;
+                        }
+                    ]
+                }
+            }
+
+            //bottom items
+            VerticalLayout {
+                alignment: end;
+                spacing: 10px;
+                for item[i] in bottom-items: Rectangle {
+                    HorizontalLayout {
+                        spacing: 10px;
+                        padding: 10px;
+                        icon3 := Image {
+                            source: item.icon;
+                            width: icon-size - 6px;
+                            colorize: icon-color;
+                        }
+
+                        if(!root.colapsed): tx2 := Text {
+                            vertical-alignment: center;
+                            text: item.title;
+                        }
+                    }
+
+                    ta3 := TouchArea {
+                        clicked => {
+                            root.select-index = i + main-items.length;
+                        }
+                    }
+
+                    states [
+                        hovered when ta3.has-hover: {
+                            background: selected-color;
+                        }
+                        seledted when (root.select-index == (i + main-items.length)): {
+                            background: selected-color;
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

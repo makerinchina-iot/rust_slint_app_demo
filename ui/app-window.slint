@@ -1,0 +1,36 @@
+import { Button, VerticalBox, TabWidget } from "std-widgets.slint";
+import { SideBar } from "widgets/side_bar.slint";
+import { PageMain } from "page/page_main.slint";
+import { PageSettings } from "page/page_settings.slint";
+import { Page2 } from "page/page2.slint";
+import { PageAboutMe } from "page/page_about_me.slint";
+
+export component AppWindow inherits Window {
+    preferred-width: 600px;
+    preferred-height: 400px;
+    title: @tr("Slint Demo");
+    icon: @image-url("icons/monkey-128.png");
+    property <length> sidebar-width:20px;
+    property <bool> side-bar-colapsed <=> side-bar.colapsed;
+    property <int> current-page <=> side-bar.select-index;
+    HorizontalLayout {
+        //left side bar
+        side-bar := SideBar {
+            icon-size: sidebar-width;
+            main-items: [
+                { icon:@image-url("icons/home.svg"), title:"Home" },
+                { icon:@image-url("icons/editor.svg"), title:"Design" },
+            ];
+            bottom-items: [
+                { icon:@image-url("icons/settings.svg"), title:"App Settings" },
+                { icon:@image-url("icons/user.svg"), title:"About Me" },
+            ];
+        }
+
+        //pages sel
+        if(current-page == 0): PageMain { }
+        if(current-page == 1): Page2 { }
+        if(current-page == 2): PageSettings { }
+        if(current-page == 3): PageAboutMe { }
+    }
+}

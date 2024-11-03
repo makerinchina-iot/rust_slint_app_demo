@@ -1,0 +1,26 @@
+
+import { VerticalBox, HorizontalBox, Switch, Palette } from "std-widgets.slint";
+export component PageSettings inherits VerticalLayout {
+    // alignment: start;
+    Rectangle {
+        VerticalBox {
+            HorizontalBox {
+                Text {
+                    text: "Thems Choose: ";
+                }
+
+                Switch {
+                    text: @tr("Dark Mode");
+                    checked: Palette.color-scheme == ColorScheme.dark;
+                    toggled => {
+                        Palette.color-scheme = self.checked ? ColorScheme.dark : ColorScheme.light;
+                    }
+                }
+
+                Rectangle { }
+            }
+
+            Rectangle { }
+        }
+    }
+}

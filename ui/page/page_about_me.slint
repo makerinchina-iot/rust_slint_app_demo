@@ -1,0 +1,29 @@
+
+import { VerticalBox } from "std-widgets.slint";
+export component PageAboutMe inherits VerticalLayout {
+    Rectangle {
+        VerticalBox {
+            // padding-top: 50px;
+            alignment: center;
+            Text {
+                horizontal-alignment: center;
+                font-size: 24px;
+                font-weight: 600;
+                text: "Powered By MonkeyPi";
+            }
+
+            Text {
+                padding-top: 80px;
+                font-size: 20px;
+                color: #5da8fd;
+                horizontal-alignment: center;
+                text: "www.makerinchina.cn";
+            }
+
+            Image {
+                preferred-height: 48px;
+                source: @image-url("../icons/monkey2.svg");
+            }
+        }
+    }
+}
